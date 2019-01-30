@@ -1,0 +1,61 @@
+@model List<Message>
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+@{
+    ViewData["Title"] = "Guestbook";
+}
+
+<div class="mt-2 row align-items-center justify-content-center">
+     <a asp-area="" asp-controller="Home" asp-action="AddMessagePage">
+        <img src="images/btnAddRecord.png" alt="Add message" style="border:none" />
+     </a>
+</div>
+
+<div class="container mt-3">
+    <table class="table" id="guestbook-dataTable">
+    </table>
+</div>
+
+@section Scripts {
+<link rel="stylesheet" type="text/css" href="~/css/datatables.min.css"/>
+
+<script type="text/javascript" src="~/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="~/js/datatables.min.js"></script>
+
+ <script type="text/javascript" nonce="kjbIBUEkjnIEBs">
+        function gettoken() {
+            var token = '@GetAntiXsrfRequestToken()';
+            return token;
+        }
+        $(document).ready(function () {
+
+            $('#guestbook-dataTable').DataTable({
+                "processing": true,
+                "paging": true,
+                "searching": false,
+                "ordering": false,
+                "lengthChange": false,
+                "pageLength": 10,
+                "serverSide": true,
+                'aoColumns': [ 
+              { sWidth: "75%", bSearchable: false, bSortable: false }, 
+               ],
+                "ajax": {
+                    "type": "POST",
+                    headers: { 'RequestVerificationToken': gettoken() },
+                    "url": '@Html.Raw(Url.Action("DataHandler", "Home"))',
+                    'data': function (data) {
+                        return data;
+                    }
+                }
+            });
+        });
+    </script>
+}
