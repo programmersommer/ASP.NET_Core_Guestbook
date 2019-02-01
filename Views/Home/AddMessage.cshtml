@@ -16,30 +16,60 @@
 
 
 <div class="container">
+    <form asp-controller="Demo" asp-action="Register" method="post" name="message">
+  
+        <div class="row">
+            <div class="form-group col-10 offset-sm-1">  
+                Name:  <input asp-for="SenderName" class="form-control" /> <br />
+                Email:  <input asp-for="Email" class="form-control" /> <br />
+            </div>
+        </div>
 
-<form asp-controller="Demo" asp-action="Register" method="post" name="message">
-    <div class="form-group">
-     Name:  <input asp-for="SenderName" class="form-control" /> <br />
-     Email:  <input asp-for="Email" class="form-control" /> <br />
+        <div class="row">
+            <div id="DivPreview" class="col-10 offset-sm-1">
+            </div>
+        </div>
 
-    <textarea data-val="true" class="form-control"
-        data-val-maxlength="The field Description must be a string or array type with a maximum length of &#x27;1024&#x27;."
-        data-val-maxlength-max="1024"
-        data-val-minlength="The field Description must be a string or array type with a minimum length of &#x27;5&#x27;."
-        data-val-minlength-min="5"
-        id="Description" name="Description">
-     </textarea>
+        <div class="row">
+        <div class="form-group col-sm-10 col-md-7 offset-sm-1">
+            <textarea data-val="true" class="form-control" asp-for="MessageText" rows="14"
+                data-val-maxlength="Not more than 1000 symbols allowed"
+                data-val-maxlength-max="1000"
+                data-val-minlength="At least 5 symbols are required"
+                data-val-minlength-min="5"
+                id="MessageText">
+            </textarea>
 
-    <input type="hidden" id="RequestVerificationToken" 
-          name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
+            <input type="hidden" id="RequestVerificationToken" 
+                name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
 
-    <button type="button" class="btn btn-success mt-3" id="btnAdd">Submit</button>
+            <button type="button" class="btn btn-success mt-3" id="btnAddMessage">Submit</button>
+        </div>
+
+        <div class="col-sm-10 col-md-3 d-flex flex-wrap">
+                <div><img src="~/images/emotions/angel.gif" class="emo" alt="Angel" style="border:none" data-value=":angel:" /></div>
+                <div><img src="~/images/emotions/angry.gif" class="emo" alt="Angry" style="border:none" data-value=":angry:" /></div>
+
+                <div><img src="~/images/emotions/fingerUp.gif" class="emo" alt="Cool" style="border:none" data-value=":fingerUp:" /></div>
+                <div><img src="~/images/emotions/fingerDown.gif" class="emo" alt="Sucks" style="border:none" data-value=":fingerDown:" /></div>
+
+                <div><img src="~/images/emotions/inLove.gif" class="emo" alt="Love" style="border:none" data-value=":inLove:" /></div>
+                
+                <div><img src="~/images/emotions/oops.gif" class="emo" alt="Oops" style="border:none" data-value=":oops:" /></div>
+
+                <div><img src="~/images/emotions/robot.gif" class="emo" alt="Robot Smile" style="border:none" data-value=":robot:" /></div>
+                <div><img src="~/images/emotions/sad.gif" class="emo" alt="Sad" style="border:none" data-value=":(" /></div>
+
+                <div><img src="~/images/emotions/smile.gif" class="emo" alt="Smile" style="border:none" data-value=":)" /></div>
+                <div><img src="~/images/emotions/wink.gif" class="emo" alt="Wink" style="border:none" data-value=";)" /></div>
+        </div>
+
     </div>
-</form>
 
+    </form>
 </div>
 
-@section Scripts{
+@section Scripts {
 
 <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["ReCaptcha:SiteKey"]" async defer></script>
 <script nonce="jhbewVUueh73jVk">
@@ -58,12 +88,31 @@
 document.addEventListener("DOMContentLoaded", ready);
 
 function ready() {
-document.getElementById('btnAdd').onclick = ValidateRecaptcha;
-}
+    document.getElementById('btnAddMessage').onclick = ValidateRecaptcha;
+    document.getElementById('MessageText').addEventListener("dragover", dragover);
+    document.getElementById('MessageText').onchange = textchanged;
+
+    const emotions = document.getElementsByClassName('emo')
+        for(const emotion of emotions) {
+        emotion.addEventListener("dragstart", dragstart)
+        }
+    }
+
+    function textchanged(e) {
+       showPreview();
+    }
+
+    function dragover(e) {
+        e.preventDefault();
+    }
+
+    function dragstart(e) {
+        e.dataTransfer.setData("text", e.target.dataset.value);
+    }
 
     function ValidateRecaptcha() {
         grecaptcha.ready(function() {
-           grecaptcha.execute('6Lf0AI0UAAAAACJQSkgj-_8ny-ij0biFMZxTmgcS', {action: 'homepage'}).then(function(token) {
+           grecaptcha.execute('@Configuration["ReCaptcha:SiteKey"]', {action: 'homepage'}).then(function(token) {
                 xhttp.open('POST', '@Url.Action("AddMessage", "Home")', true);
                 xhttp.setRequestHeader("RequestVerificationToken", 
                 document.getElementById('RequestVerificationToken').value);
@@ -73,5 +122,38 @@ document.getElementById('btnAdd').onclick = ValidateRecaptcha;
          });
      });
    }
+
+   function showPreview() {
+  
+        preview = document.getElementById('DivPreview');
+        texxt = "";
+        if (document.all) {
+            texxt = document.getElementById('MessageText').innerText;
+        }
+        else {
+            texxt = document.getElementById('MessageText').value;
+        }
+
+        texxt = texxt.replace(/&/g, '&amp;');
+        texxt = texxt.replace(/</g, '&lt;');
+        texxt = texxt.replace(/"/g, '&quot;');
+        texxt = texxt.replace(/>/g, '&gt;');
+
+        texxt = texxt.replace(/\:\)/g, "<img src='/images/emotions/smile.gif'>");
+        texxt = texxt.replace(/\;\)/g, "<img src='/images/emotions/wink.gif'>");
+        texxt = texxt.replace(/\:\(/g, "<img src='/images/emotions/sad.gif'>");
+        texxt = texxt.replace(/:robot:/g, "<img src='/images/emotions/robot.gif'>");
+        texxt = texxt.replace(/:oops:/g, "<img src='/images/emotions/oops.gif'>");
+        texxt = texxt.replace(/:inLove:/g, "<img src='/images/emotions/inLove.gif'>");
+        texxt = texxt.replace(/:fingerUp:/g, "<img src='/images/emotions/fingerUp.gif'>");
+        texxt = texxt.replace(/:fingerDown:/g, "<img src='/images/emotions/fingerDown.gif'>");
+        texxt = texxt.replace(/:angel:/g, "<img src='/images/emotions/angel.gif'>");
+        texxt = texxt.replace(/:angry:/g, "<img src='/images/emotions/angry.gif'>");
+
+        texxt = texxt.replace(/\n/g, "<br />");
+
+        document.getElementById('DivPreview').innerHTML = "<p>" + texxt + "</p>";
+    }
+
 </script>
 }

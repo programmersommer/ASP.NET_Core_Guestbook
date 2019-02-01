@@ -12,6 +12,9 @@ using System.Data;
 using System.Data.SqlClient;
 using Dapper;
 using Guestbook.Models;
+using System.Net.Http;
+using Newtonsoft.Json;
+using Dapper.Contrib.Extensions;
 
 namespace Guestbook
 {
@@ -30,7 +33,7 @@ namespace Guestbook
             // List<Message> messages;
             // using (IDbConnection db = new SqlConnection(_configuration["SQLConnectionString"]))
             // {
-            //     messages = db.Query<Message>("SELECT * FROM Messages2").ToList();
+            //     messages = db.Query<Message>("SELECT * FROM Message").ToList();
             // }
 
             return View("Index");
@@ -44,10 +47,32 @@ namespace Guestbook
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-          public string AddMessage(Guestbook.ViewModels.AddMessageViewModel model)
+          public async Task<bool> AddMessage(Guestbook.ViewModels.AddMessageViewModel model)
         {
+            using (var client = new HttpClient()) {
 
-           return model.Token;
+            var parameters = new Dictionary<string, string> { 
+                { "secret", _configuration["ReCaptcha:SecretKey"] }, 
+                { "response", model.Token } };
+            var encodedContent = new FormUrlEncodedContent (parameters);
+            var response = await client.PostAsync("https://www.google.com/recaptcha/api/siteverify", encodedContent);
+            var result = JsonConvert.DeserializeObject<ReCaptchaResponse>(await response.Content.ReadAsStringAsync());
+
+                if (result.success) {
+
+                    using (IDbConnection connection = new SqlConnection(_configuration["SQLConnectionString"]))
+                    {
+                      await connection.InsertAsync<Message>(new Message { SenderName = model.SenderName, Email = model.Email, MessageText = model.MessageText, MessageDate = System.DateTime.UtcNow});
+                      
+                      // without Contrib extension TODO check
+                      //string sql = "INSERT INTO Message([SenderName],[Email],[MessageText],[MessageDate]) values (@SenderName, @Email, @MessageText, @MessageDate)";
+                      //var identity = connection.Execute(sql, new Message { SenderName = model.SenderName, Email = model.Email, MessageText = model.MessageText, MessageDate = System.DateTime.UtcNow});
+                    }
+
+                }
+            }
+
+           return true;
         }
 
 
@@ -59,10 +84,10 @@ namespace Guestbook
 
             List<Message> messages;
             int total;
-            using (IDbConnection db = new SqlConnection(_configuration["SQLConnectionString"]))
+            using (IDbConnection connection = new SqlConnection(_configuration["SQLConnectionString"]))
             {
-                total = db.QuerySingle<int>("SELECT Count(*) FROM Messages2");
-                messages = db.Query<Message>("SELECT * FROM Messages2 ORDER BY MessageDate ASC OFFSET "+start+" ROWS FETCH NEXT "+length+" ROWS ONLY").ToList();
+                total = connection.QuerySingle<int>("SELECT Count(*) FROM Message");
+                messages = connection.Query<Message>("SELECT * FROM Message ORDER BY MessageDate DESC OFFSET "+start+" ROWS FETCH NEXT "+length+" ROWS ONLY").ToList();
             }
                 
                 var newData = messages.Select(m => new[]

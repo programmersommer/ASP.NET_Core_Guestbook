@@ -26,5 +26,5 @@ namespace Guestbook.Models
 //     MessageDate smalldatetime
 // ); 
 
-// INSERT INTO dbo.Messages2 (SenderName, Email, MessageText, MessageDate)
+// INSERT INTO dbo.Message (SenderName, Email, MessageText, MessageDate)
 // SELECT senderName, email, txt, dte FROM dbo.messages
