@@ -25,6 +25,3 @@ namespace Guestbook.Models
 //     MessageText nvarchar(Max),
 //     MessageDate smalldatetime
 // ); 
-
-// INSERT INTO dbo.Message (SenderName, Email, MessageText, MessageDate)
-// SELECT senderName, email, txt, dte FROM dbo.messages

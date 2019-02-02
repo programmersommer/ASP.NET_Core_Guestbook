@@ -32,7 +32,7 @@ namespace Guestbook
 			 else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                // app.UseHsts();
+                 app.UseHsts();
             }
 
             app.Use(async (context, next) =>
@@ -51,7 +51,7 @@ namespace Guestbook
                 await next();
             });
 			
-			// app.UseHttpsRedirection();
+			app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 

@@ -78,9 +78,9 @@
         xhttp.onreadystatechange = function() {
             if (xhttp.readyState == XMLHttpRequest.DONE) {
                 if (xhttp.status == 200) {
-                    alert(xhttp.responseText);
+                    window.location.href = "/";
                 } else {
-                    alert('There was an error processing the AJAX request.');
+                    alert('There was an error during posting message process');
                 }
             }
         };
@@ -139,16 +139,16 @@ function ready() {
         texxt = texxt.replace(/"/g, '&quot;');
         texxt = texxt.replace(/>/g, '&gt;');
 
-        texxt = texxt.replace(/\:\)/g, "<img src='/images/emotions/smile.gif'>");
-        texxt = texxt.replace(/\;\)/g, "<img src='/images/emotions/wink.gif'>");
-        texxt = texxt.replace(/\:\(/g, "<img src='/images/emotions/sad.gif'>");
-        texxt = texxt.replace(/:robot:/g, "<img src='/images/emotions/robot.gif'>");
-        texxt = texxt.replace(/:oops:/g, "<img src='/images/emotions/oops.gif'>");
-        texxt = texxt.replace(/:inLove:/g, "<img src='/images/emotions/inLove.gif'>");
-        texxt = texxt.replace(/:fingerUp:/g, "<img src='/images/emotions/fingerUp.gif'>");
-        texxt = texxt.replace(/:fingerDown:/g, "<img src='/images/emotions/fingerDown.gif'>");
-        texxt = texxt.replace(/:angel:/g, "<img src='/images/emotions/angel.gif'>");
-        texxt = texxt.replace(/:angry:/g, "<img src='/images/emotions/angry.gif'>");
+        texxt = texxt.replace(/\:\)/g, "<img src='../images/emotions/smile.gif'>");
+        texxt = texxt.replace(/\;\)/g, "<img src='../images/emotions/wink.gif'>");
+        texxt = texxt.replace(/\:\(/g, "<img src='../images/emotions/sad.gif'>");
+        texxt = texxt.replace(/:robot:/g, "<img src='../images/emotions/robot.gif'>");
+        texxt = texxt.replace(/:oops:/g, "<img src='../images/emotions/oops.gif'>");
+        texxt = texxt.replace(/:inLove:/g, "<img src='../images/emotions/inLove.gif'>");
+        texxt = texxt.replace(/:fingerUp:/g, "<img src='../images/emotions/fingerUp.gif'>");
+        texxt = texxt.replace(/:fingerDown:/g, "<img src='../images/emotions/fingerDown.gif'>");
+        texxt = texxt.replace(/:angel:/g, "<img src='../images/emotions/angel.gif'>");
+        texxt = texxt.replace(/:angry:/g, "<img src='../images/emotions/angry.gif'>");
 
         texxt = texxt.replace(/\n/g, "<br />");
 

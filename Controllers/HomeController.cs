@@ -49,6 +49,7 @@ namespace Guestbook
         [ValidateAntiForgeryToken]
           public async Task<bool> AddMessage(Guestbook.ViewModels.AddMessageViewModel model)
         {
+            try {
             using (var client = new HttpClient()) {
 
             var parameters = new Dictionary<string, string> { 
@@ -62,22 +63,27 @@ namespace Guestbook
 
                     using (IDbConnection connection = new SqlConnection(_configuration["SQLConnectionString"]))
                     {
-                      await connection.InsertAsync<Message>(new Message { SenderName = model.SenderName, Email = model.Email, MessageText = model.MessageText, MessageDate = System.DateTime.UtcNow});
+                         await connection.InsertAsync<Message>(new Message { SenderName = model.SenderName, Email = model.Email, MessageText = model.MessageText, MessageDate = System.DateTime.UtcNow});
                       
-                      // without Contrib extension TODO check
-                      //string sql = "INSERT INTO Message([SenderName],[Email],[MessageText],[MessageDate]) values (@SenderName, @Email, @MessageText, @MessageDate)";
-                      //var identity = connection.Execute(sql, new Message { SenderName = model.SenderName, Email = model.Email, MessageText = model.MessageText, MessageDate = System.DateTime.UtcNow});
+                      // without Contrib extension
+                      // string sql = "INSERT INTO Messages([SenderName],[Email],[MessageText],[MessageDate]) values (@SenderName, @Email, @MessageText, @MessageDate)";
+                      // var identity = connection.Execute(sql, new Message { SenderName = model.SenderName, Email = model.Email, MessageText = model.MessageText, MessageDate = System.DateTime.UtcNow});
                     }
 
                 }
+              }
+            }
+            catch {
+                return false;
             }
 
            return true;
         }
 
 
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DataHandler(DataTableParameters model, string texttype, string projectid, DateTime? datefrom, DateTime? datetill)
+        public IActionResult DataHandler(DataTableParameters model)
         {
             var start = Convert.ToInt32(HttpContext.Request.Form["start"].FirstOrDefault());
             var length = Convert.ToInt32(HttpContext.Request.Form["length"].FirstOrDefault());
@@ -86,8 +92,8 @@ namespace Guestbook
             int total;
             using (IDbConnection connection = new SqlConnection(_configuration["SQLConnectionString"]))
             {
-                total = connection.QuerySingle<int>("SELECT Count(*) FROM Message");
-                messages = connection.Query<Message>("SELECT * FROM Message ORDER BY MessageDate DESC OFFSET "+start+" ROWS FETCH NEXT "+length+" ROWS ONLY").ToList();
+                total = connection.QuerySingle<int>("SELECT Count(*) FROM dbo.Messages");
+                messages = connection.Query<Message>("SELECT * FROM dbo.Messages ORDER BY MessageDate DESC OFFSET "+start+" ROWS FETCH NEXT "+length+" ROWS ONLY").ToList();
             }
                 
                 var newData = messages.Select(m => new[]
@@ -112,7 +118,7 @@ namespace Guestbook
                     iTotalRecords = total
                 };
 
-                return Json(result);           
+                return Json(result);       
         }
 
           public string DisplaySmiles(string text)
