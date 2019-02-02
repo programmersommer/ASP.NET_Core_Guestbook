@@ -47,21 +47,21 @@
         </div>
 
         <div class="col-sm-10 col-md-3 d-flex flex-wrap">
-                <div><img src="~/images/emotions/angel.gif" class="emo" alt="Angel" style="border:none" data-value=":angel:" /></div>
-                <div><img src="~/images/emotions/angry.gif" class="emo" alt="Angry" style="border:none" data-value=":angry:" /></div>
+                <div><img src="~/images/emotions/angel.gif" draggable="true" class="emo" alt="Angel" style="border:none" data-value=":angel:" /></div>
+                <div><img src="~/images/emotions/angry.gif" draggable="true" class="emo" alt="Angry" style="border:none" data-value=":angry:" /></div>
 
-                <div><img src="~/images/emotions/fingerUp.gif" class="emo" alt="Cool" style="border:none" data-value=":fingerUp:" /></div>
-                <div><img src="~/images/emotions/fingerDown.gif" class="emo" alt="Sucks" style="border:none" data-value=":fingerDown:" /></div>
+                <div><img src="~/images/emotions/fingerUp.gif" draggable="true" class="emo" alt="Cool" style="border:none" data-value=":fingerUp:" /></div>
+                <div><img src="~/images/emotions/fingerDown.gif" draggable="true" class="emo" alt="Sucks" style="border:none" data-value=":fingerDown:" /></div>
 
-                <div><img src="~/images/emotions/inLove.gif" class="emo" alt="Love" style="border:none" data-value=":inLove:" /></div>
+                <div><img src="~/images/emotions/inLove.gif" draggable="true" class="emo" alt="Love" style="border:none" data-value=":inLove:" /></div>
                 
-                <div><img src="~/images/emotions/oops.gif" class="emo" alt="Oops" style="border:none" data-value=":oops:" /></div>
+                <div><img src="~/images/emotions/oops.gif" draggable="true" class="emo" alt="Oops" style="border:none" data-value=":oops:" /></div>
 
-                <div><img src="~/images/emotions/robot.gif" class="emo" alt="Robot Smile" style="border:none" data-value=":robot:" /></div>
-                <div><img src="~/images/emotions/sad.gif" class="emo" alt="Sad" style="border:none" data-value=":(" /></div>
+                <div><img src="~/images/emotions/robot.gif" draggable="true" class="emo" alt="Robot Smile" style="border:none" data-value=":robot:" /></div>
+                <div><img src="~/images/emotions/sad.gif" draggable="true" class="emo" alt="Sad" style="border:none" data-value=":(" /></div>
 
-                <div><img src="~/images/emotions/smile.gif" class="emo" alt="Smile" style="border:none" data-value=":)" /></div>
-                <div><img src="~/images/emotions/wink.gif" class="emo" alt="Wink" style="border:none" data-value=";)" /></div>
+                <div><img src="~/images/emotions/smile.gif" draggable="true" class="emo" alt="Smile" style="border:none" data-value=":)" /></div>
+                <div><img src="~/images/emotions/wink.gif" draggable="true" class="emo" alt="Wink" style="border:none" data-value=";)" /></div>
         </div>
 
     </div>
@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", ready);
 function ready() {
     document.getElementById('btnAddMessage').onclick = ValidateRecaptcha;
     document.getElementById('MessageText').addEventListener("dragover", dragover);
+    document.getElementById('MessageText').addEventListener("drop", drop);
     document.getElementById('MessageText').onchange = textchanged;
 
     const emotions = document.getElementsByClassName('emo')
@@ -105,6 +106,13 @@ function ready() {
     function dragover(e) {
         e.preventDefault();
     }
+
+    function drop(ev) {
+      ev.preventDefault();
+      document.getElementById('MessageText').value = document.getElementById('MessageText').value + ev.dataTransfer.getData("text");
+      showPreview();
+    }
+
 
     function dragstart(e) {
         e.dataTransfer.setData("text", e.target.dataset.value);
