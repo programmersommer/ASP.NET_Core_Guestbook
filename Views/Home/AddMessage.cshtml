@@ -134,33 +134,39 @@ function ready() {
    function showPreview() {
   
         preview = document.getElementById('DivPreview');
-        texxt = "";
+        text = "";
         if (document.all) {
-            texxt = document.getElementById('MessageText').innerText;
+            text = document.getElementById('MessageText').innerText;
         }
         else {
-            texxt = document.getElementById('MessageText').value;
+            text = document.getElementById('MessageText').value;
         }
 
-        texxt = texxt.replace(/&/g, '&amp;');
-        texxt = texxt.replace(/</g, '&lt;');
-        texxt = texxt.replace(/"/g, '&quot;');
-        texxt = texxt.replace(/>/g, '&gt;');
+        var dictionary = {
+            "\&": "&amp;",
+            "\<": "&lt;",
+            "\"": "&quot;",
+            "\>": "&gt;",
+            "\:\)": "<img src='../images/emotions/smile.gif'>",
+            "\;\)": "<img src='../images/emotions/wink.gif'>",
+            "\:\(": "<img src='../images/emotions/sad.gif'>",
+            "\:robot\:": "<img src='../images/emotions/robot.gif'>",
+            "\:oops\:": "<img src='../images/emotions/oops.gif'>",
+            "\:inLove\:": "<img src='../images/emotions/inLove.gif'>",
+            "\:fingerUp\:": "<img src='../images/emotions/fingerUp.gif'>",
+            "\:fingerDown\:": "<img src='../images/emotions/fingerDown.gif'>",
+            "\:angel\:": "<img src='../images/emotions/angel.gif'>",
+            "\:angry\:": "<img src='../images/emotions/angry.gif'>",
+            "\n": "<br />"
+        };
 
-        texxt = texxt.replace(/\:\)/g, "<img src='../images/emotions/smile.gif'>");
-        texxt = texxt.replace(/\;\)/g, "<img src='../images/emotions/wink.gif'>");
-        texxt = texxt.replace(/\:\(/g, "<img src='../images/emotions/sad.gif'>");
-        texxt = texxt.replace(/:robot:/g, "<img src='../images/emotions/robot.gif'>");
-        texxt = texxt.replace(/:oops:/g, "<img src='../images/emotions/oops.gif'>");
-        texxt = texxt.replace(/:inLove:/g, "<img src='../images/emotions/inLove.gif'>");
-        texxt = texxt.replace(/:fingerUp:/g, "<img src='../images/emotions/fingerUp.gif'>");
-        texxt = texxt.replace(/:fingerDown:/g, "<img src='../images/emotions/fingerDown.gif'>");
-        texxt = texxt.replace(/:angel:/g, "<img src='../images/emotions/angel.gif'>");
-        texxt = texxt.replace(/:angry:/g, "<img src='../images/emotions/angry.gif'>");
+        var regText = Object.keys(dictionary).join("|").replace(/\)/g,"\\)").replace(/\(/g,"\\(");
+        var reg = new RegExp(regText,"gi");
+        var str = text.replace(reg, function(matched){
+            return dictionary[matched];
+        });
 
-        texxt = texxt.replace(/\n/g, "<br />");
-
-        document.getElementById('DivPreview').innerHTML = "<p>" + texxt + "</p>";
+        document.getElementById('DivPreview').innerHTML = "<p>" + str + "</p>";
     }
 
 </script>
