@@ -5,7 +5,6 @@ namespace Guestbook.Models
 
     public class DataTableParameters
     {
-        public string texttype { get; set; }
         public List<DataTableColumn> Columns { get; set; }
         public int Draw { get; set; }
         public int iDisplayLength { get; set; }

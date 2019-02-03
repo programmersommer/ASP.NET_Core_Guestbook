@@ -1,4 +1,3 @@
-
 using System;
 using System.Text;
 using System.Diagnostics;
@@ -30,16 +29,10 @@ namespace Guestbook
 
         public IActionResult Index()
         {
-            // List<Message> messages;
-            // using (IDbConnection db = new SqlConnection(_configuration["SQLConnectionString"]))
-            // {
-            //     messages = db.Query<Message>("SELECT * FROM Message").ToList();
-            // }
-
             return View("Index");
         }
 
-          public IActionResult AddMessagePage()
+        public IActionResult AddMessagePage()
         {
 
            return View("AddMessage");
@@ -47,7 +40,7 @@ namespace Guestbook
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-          public async Task<bool> AddMessage(Guestbook.ViewModels.AddMessageViewModel model)
+        public async Task<bool> AddMessage(Guestbook.ViewModels.AddMessageViewModel model)
         {
             try {
             using (var client = new HttpClient()) {
@@ -110,21 +103,20 @@ namespace Guestbook
                                    +"</div>"
                 }).ToList();
 
+            var result = new
+            {
+                aaData = newData,
+                iTotalDisplayRecords = total,
+                iTotalRecords = total
+            };
 
-                var result = new
-                {
-                    aaData = newData,
-                    iTotalDisplayRecords = total,
-                    iTotalRecords = total
-                };
-
-                return Json(result);       
+            return Json(result);       
         }
 
-          public string DisplaySmiles(string text)
+        public string DisplaySmiles(string text)
         {
             StringBuilder mess = new StringBuilder(text);
-
+     
             mess = mess.Replace(":)", "<img alt='smile' src='images/emotions/smile.gif' />");
             mess = mess.Replace(";)", "<img alt='wink' src='images/emotions/wink.gif' />");
             mess = mess.Replace(":(", "<img alt='sad' src='images/emotions/sad.gif' />");
@@ -135,11 +127,9 @@ namespace Guestbook
             mess = mess.Replace(":fingerDown:", "<img alt='finger down' src='images/emotions/fingerDown.gif' />");
             mess = mess.Replace(":angel:", "<img alt='angel' src='images/emotions/angel.gif' />");
             mess = mess.Replace(":angry:", "<img alt='angry' src='images/emotions/angry.gif' />");      
-            mess = mess.Replace("&lt;br /&gt;", "<br />");
             
             return mess.ToString();
         }
 
     }
-
 }

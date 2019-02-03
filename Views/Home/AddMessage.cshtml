@@ -160,6 +160,7 @@ function ready() {
             "\n": "<br />"
         };
 
+        // ) and ( signs should be escaped
         var regText = Object.keys(dictionary).join("|").replace(/\)/g,"\\)").replace(/\(/g,"\\(");
         var reg = new RegExp(regText,"gi");
         var str = text.replace(reg, function(matched){
