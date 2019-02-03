@@ -96,7 +96,13 @@ function ready() {
     const emotions = document.getElementsByClassName('emo')
         for(const emotion of emotions) {
         emotion.addEventListener("dragstart", dragstart)
+        emotion.addEventListener("click", clicked)
         }
+    }
+
+    function clicked(e) {
+        document.getElementById('MessageText').value = document.getElementById('MessageText').value + e.target.getAttribute("data-value");
+        showPreview();
     }
 
     function textchanged(e) {
