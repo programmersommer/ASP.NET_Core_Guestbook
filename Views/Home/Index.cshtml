@@ -50,7 +50,7 @@
                 "ajax": {
                     "type": "POST",
                     headers: { 'RequestVerificationToken': gettoken() },
-                    "url": '@Html.Raw(Url.Action("DataHandler", "Home"))',
+                    "url": '@Url.Action("DataHandler", "Home")',
                     'data': function (data) {
                         return data;
                     }

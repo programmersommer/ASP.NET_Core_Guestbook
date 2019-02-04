@@ -93,11 +93,11 @@ function ready() {
     document.getElementById('MessageText').addEventListener("drop", drop);
     document.getElementById('MessageText').onchange = textchanged;
 
-    const emotions = document.getElementsByClassName('emo')
-        for(const emotion of emotions) {
-        emotion.addEventListener("dragstart", dragstart)
-        emotion.addEventListener("click", clicked)
-        }
+    var emotions = document.getElementsByClassName('emo');
+        for (var i = 0; i < emotions.length; i++) {
+            emotions[i].addEventListener("dragstart", dragstart);
+            emotions[i].addEventListener("click", clicked);
+        }​
     }
 
     function clicked(e) {
