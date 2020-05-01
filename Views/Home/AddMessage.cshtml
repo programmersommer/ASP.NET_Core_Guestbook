@@ -43,7 +43,7 @@
             <input type="hidden" id="RequestVerificationToken" 
                 name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
 
-            <button type="button" class="btn btn-success mt-3" id="btnAddMessage">Submit</button>
+            <button type="button" class="btn btn-success mt-3" id="BtnAddMessage">Submit</button>
         </div>
 
         <div class="col-sm-10 col-md-3 d-flex flex-wrap">
@@ -72,7 +72,7 @@
 @section Scripts {
 
 <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["ReCaptcha:SiteKey"]" async defer></script>
-<script nonce="jhbewVUueh73jVk">
+<script nonce="TEtKSEIjJFUyeWJ0NHVieWxCWVVVT2RmYmc7d3RoaA==">
 
     var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -80,7 +80,7 @@
                 if (xhttp.status == 200) {
                     window.location.href = "/";
                 } else {
-                    alert('There was an error during posting message process');
+                    alert('There was an error during posting message');
                 }
             }
         };
@@ -88,7 +88,7 @@
 document.addEventListener("DOMContentLoaded", ready);
 
 function ready() {
-    document.getElementById('btnAddMessage').onclick = ValidateRecaptcha;
+    document.getElementById('BtnAddMessage').onclick = ValidateRecaptcha;
     document.getElementById('MessageText').addEventListener("dragover", dragover);
     document.getElementById('MessageText').addEventListener("drop", drop);
     document.getElementById('MessageText').onchange = textchanged;

@@ -2,3 +2,4 @@ appsettings.Development.json
 /obj
 /bin
 /.vscode
+/.vs

@@ -12,6 +12,7 @@ using Guestbook.Models;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Dapper.Contrib.Extensions;
+using System.Web;
 
 namespace Guestbook
 {
@@ -89,14 +90,14 @@ namespace Guestbook
             var newData = messages.Select(m => new[]
             {
                     "<div class=\"row align-items-center justify-content-center mt-3\">"
-                                  +"<span style=\"color:Orange;\">"+m.SenderName+"</span>"
+                                  +"<span style=\"color:Orange;\">"+HttpUtility.HtmlEncode(m.SenderName)+"</span>"
                                           +"&nbsp; &nbsp; &nbsp;"
-                                     + "<span style=\"color:DarkBlue;\">"+m.Email+"</span>"
+                                     + "<span style=\"color:DarkBlue;\">"+HttpUtility.HtmlEncode(m.Email)+"</span>"
                                          +"&nbsp; &nbsp; &nbsp;"
-                                     +"<span style=\"color:BurlyWood;\">"+m.MessageDate+"</span>"
+                                     +"<span style=\"color:BurlyWood;\">"+HttpUtility.HtmlEncode(m.MessageDate)+"</span>"
                                    +"</div>"
                                    +"<div class=\"row align-items-center justify-content-center mt-3\">"
-                                      +"<div>"+DisplaySmiles(m.MessageText)+"</div>"
+                                      +"<div>"+DisplaySmiles(HttpUtility.HtmlEncode(m.MessageText))+"</div>"
                                    +"</div>"
                 }).ToList();
 
@@ -112,20 +113,20 @@ namespace Guestbook
 
         public string DisplaySmiles(string text)
         {
-            StringBuilder mess = new StringBuilder(text);
+            StringBuilder sb = new StringBuilder(text);
 
-            mess = mess.Replace(":)", "<img alt='smile' src='images/emotions/smile.gif' />");
-            mess = mess.Replace(";)", "<img alt='wink' src='images/emotions/wink.gif' />");
-            mess = mess.Replace(":(", "<img alt='sad' src='images/emotions/sad.gif' />");
-            mess = mess.Replace(":robot:", "<img alt='robot' src='images/emotions/robot.gif' />");
-            mess = mess.Replace(":oops:", "<img alt='oops' src='images/emotions/oops.gif' />");
-            mess = mess.Replace(":inLove:", "<img alt='love' src='images/emotions/inLove.gif' />");
-            mess = mess.Replace(":fingerUp:", "<img alt='finger up' src='images/emotions/fingerUp.gif' />");
-            mess = mess.Replace(":fingerDown:", "<img alt='finger down' src='images/emotions/fingerDown.gif' />");
-            mess = mess.Replace(":angel:", "<img alt='angel' src='images/emotions/angel.gif' />");
-            mess = mess.Replace(":angry:", "<img alt='angry' src='images/emotions/angry.gif' />");
+            sb = sb.Replace(":)", "<img alt='smile' src='images/emotions/smile.gif' />")
+                       .Replace(";)", "<img alt='wink' src='images/emotions/wink.gif' />")
+                       .Replace(":(", "<img alt='sad' src='images/emotions/sad.gif' />")
+                       .Replace(":robot:", "<img alt='robot' src='images/emotions/robot.gif' />")
+                       .Replace(":oops:", "<img alt='oops' src='images/emotions/oops.gif' />")
+                       .Replace(":inLove:", "<img alt='love' src='images/emotions/inLove.gif' />")
+                       .Replace(":fingerUp:", "<img alt='finger up' src='images/emotions/fingerUp.gif' />")
+                       .Replace(":fingerDown:", "<img alt='finger down' src='images/emotions/fingerDown.gif' />")
+                       .Replace(":angel:", "<img alt='angel' src='images/emotions/angel.gif' />")
+                       .Replace(":angry:", "<img alt='angry' src='images/emotions/angry.gif' />");
 
-            return mess.ToString();
+            return sb.ToString();
         }
 
     }

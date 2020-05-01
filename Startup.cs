@@ -39,7 +39,7 @@ namespace Guestbook
                 "Content-Security-Policy",
                 "default-src 'self'; " +
                 "style-src 'self' 'unsafe-inline'; " +
-                "script-src 'self' 'nonce-kjbIBUEkjnIEBs' 'nonce-jhbewVUueh73jVk' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; " +
+                "script-src 'self' 'nonce-TGhqYjM1aWx1Z2JwYWlucDl1UE9JQg==' 'nonce-TEtKSEIjJFUyeWJ0NHVieWxCWVVVT2RmYmc7d3RoaA==' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; " +
                 "frame-src https://www.google.com/recaptcha/");
 
                 await next();
