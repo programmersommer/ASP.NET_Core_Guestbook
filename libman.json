@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "bootstrap@4.4.1",
+      "destination": "wwwroot/bootstrap/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.5.0",
+      "destination": "wwwroot/jquery/"
+    },
+    {
+      "library": "datatables@1.10.18",
+      "destination": "wwwroot/datatables/"
+    }
+  ]
+}
