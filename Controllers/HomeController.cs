@@ -55,7 +55,7 @@ namespace Guestbook
                 {
                     using (IDbConnection connection = new SqlConnection(_configuration["SQLConnectionString"]))
                     {
-                        await connection.InsertAsync<Message>(new Message { SenderName = model.SenderName, Email = model.Email, MessageText = model.MessageText, MessageDate = System.DateTime.UtcNow });
+                        await connection.InsertAsync<Message>(new Message { SenderName = model.Name, Email = model.Email, MessageText = model.MessageText, MessageDate = System.DateTime.UtcNow });
 
                         // without Contrib extension
                         // string sql = "INSERT INTO Messages([SenderName],[Email],[MessageText],[MessageDate]) values (@SenderName, @Email, @MessageText, @MessageDate)";
