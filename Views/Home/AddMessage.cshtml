@@ -1,6 +1,6 @@
 @model Guestbook.ViewModels.AddMessageViewModel
-@using Microsoft.Extensions.Configuration  
-@inject IConfiguration Configuration  
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 
 @functions{
@@ -16,63 +16,66 @@
 
 
 <div class="container">
-    <form asp-controller="Demo" asp-action="Register" method="post" name="message">
-  
-        <div class="row">
-            <div class="form-group col-10 offset-sm-1">  
-                Name:  <input asp-for="SenderName" class="form-control" /> <br />
-                Email:  <input asp-for="Email" class="form-control" /> <br />
+    <form method="post" name="message">
+
+        <div class="row mt-3">
+            <div class="form-group col-10 col-md-5 col-xl-4 offset-1">
+                <input asp-for="SenderName" class="form-control" placeholder="Name" />
+                <span asp-validation-for="SenderName"></span>
+            </div>
+            <div class="form-group col-10 col-md-5 col-xl-4 offset-1 offset-md-0">
+                <input asp-for="Email" class="form-control" placeholder="Email" />
+                <span asp-validation-for="Email"></span>
             </div>
         </div>
 
         <div class="row">
-            <div id="DivPreview" class="col-10 offset-sm-1">
+            <div id="DivPreview" class="col-10 offset-1">
             </div>
         </div>
 
         <div class="row">
-        <div class="form-group col-sm-10 col-md-7 offset-sm-1">
-            <textarea data-val="true" class="form-control" asp-for="MessageText" rows="14"
-                data-val-maxlength="Not more than 1000 symbols allowed"
-                data-val-maxlength-max="1000"
-                data-val-minlength="At least 5 symbols are required"
-                data-val-minlength-min="5"
-                id="MessageText">
+            <div class="form-group col-sm-10 col-md-7 col-xl-8 offset-1">
+                <textarea data-val="true" class="form-control" asp-for="MessageText" rows="14"
+                          data-val-maxlength="Not more than 1000 symbols allowed"
+                          data-val-maxlength-max="1000"
+                          data-val-minlength="At least 5 symbols are required"
+                          data-val-minlength-min="5"
+                          id="MessageText">
             </textarea>
 
-            <input type="hidden" id="RequestVerificationToken" 
-                name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
+                <input type="hidden" id="RequestVerificationToken"
+                       name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
+            </div>
 
-            <button type="button" class="btn btn-success mt-3" id="BtnAddMessage">Submit</button>
-        </div>
-
-        <div class="col-sm-10 col-md-3 d-flex flex-wrap">
+            <div class="col-sm-10 col-md-3 col-xl-2 d-flex flex-wrap offset-1 offset-md-0">
                 <div><img src="~/images/emotions/angel.gif" draggable="true" class="emo" alt="Angel" style="border:none" data-value=":angel:" /></div>
                 <div><img src="~/images/emotions/angry.gif" draggable="true" class="emo" alt="Angry" style="border:none" data-value=":angry:" /></div>
-
                 <div><img src="~/images/emotions/fingerUp.gif" draggable="true" class="emo" alt="Cool" style="border:none" data-value=":fingerUp:" /></div>
                 <div><img src="~/images/emotions/fingerDown.gif" draggable="true" class="emo" alt="Sucks" style="border:none" data-value=":fingerDown:" /></div>
-
                 <div><img src="~/images/emotions/inLove.gif" draggable="true" class="emo" alt="Love" style="border:none" data-value=":inLove:" /></div>
-                
                 <div><img src="~/images/emotions/oops.gif" draggable="true" class="emo" alt="Oops" style="border:none" data-value=":oops:" /></div>
-
                 <div><img src="~/images/emotions/robot.gif" draggable="true" class="emo" alt="Robot Smile" style="border:none" data-value=":robot:" /></div>
                 <div><img src="~/images/emotions/sad.gif" draggable="true" class="emo" alt="Sad" style="border:none" data-value=":(" /></div>
-
                 <div><img src="~/images/emotions/smile.gif" draggable="true" class="emo" alt="Smile" style="border:none" data-value=":)" /></div>
                 <div><img src="~/images/emotions/wink.gif" draggable="true" class="emo" alt="Wink" style="border:none" data-value=";)" /></div>
+            </div>
+
         </div>
 
-    </div>
+        <div class="row">
+            <div class="col-10 offset-sm-1">
+                <button type="button" class="btn btn-success mt-3" id="BtnAddMessage">Submit</button>
+            </div>
+        </div>
 
     </form>
 </div>
 
 @section Scripts {
 
-<script src="https://www.google.com/recaptcha/api.js?render=@Configuration["ReCaptcha:SiteKey"]" async defer></script>
-<script nonce="TEtKSEIjJFUyeWJ0NHVieWxCWVVVT2RmYmc7d3RoaA==">
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["ReCaptcha:SiteKey"]" async defer></script>
+    <script nonce="TEtKSEIjJFUyeWJ0NHVieWxCWVVVT2RmYmc7d3RoaA==">
 
     var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -85,19 +88,20 @@
             }
         };
 
-document.addEventListener("DOMContentLoaded", ready);
+    document.addEventListener("DOMContentLoaded", ready);
 
-function ready() {
-    document.getElementById('BtnAddMessage').onclick = ValidateRecaptcha;
-    document.getElementById('MessageText').addEventListener("dragover", dragover);
-    document.getElementById('MessageText').addEventListener("drop", drop);
-    document.getElementById('MessageText').onchange = textchanged;
+    function ready() {
+        document.getElementById('BtnAddMessage').onclick = ValidateRecaptcha;
+        document.getElementById('MessageText').addEventListener("dragover", dragover);
+        document.getElementById('MessageText').addEventListener("drop", drop);
+        document.getElementById('MessageText').onchange = textchanged;
+        document.getElementById('MessageText').onkeyup = textchanged;
 
-    var emotions = document.getElementsByClassName('emo');
-        for (var i = 0; i < emotions.length; i++) {
-            emotions[i].addEventListener("dragstart", dragstart);
-            emotions[i].addEventListener("click", clicked);
-        }
+        var emotions = document.getElementsByClassName('emo');
+            for (var i = 0; i < emotions.length; i++) {
+                emotions[i].addEventListener("dragstart", dragstart);
+                emotions[i].addEventListener("click", clicked);
+            }
     }
 
     function clicked(e) {
@@ -119,7 +123,6 @@ function ready() {
       showPreview();
     }
 
-
     function dragstart(e) {
         e.dataTransfer.setData("text", e.target.dataset.value);
     }
@@ -128,17 +131,35 @@ function ready() {
         grecaptcha.ready(function() {
            grecaptcha.execute('@Configuration["ReCaptcha:SiteKey"]', {action: 'homepage'}).then(function(token) {
                 xhttp.open('POST', '@Url.Action("AddMessage", "Home")', true);
-                xhttp.setRequestHeader("RequestVerificationToken", 
+                xhttp.setRequestHeader("RequestVerificationToken",
                 document.getElementById('RequestVerificationToken').value);
                 var formData = new FormData(document.forms.message);
                 formData.append("Token", token)
                 xhttp.send(formData);
-         });
-     });
-   }
+           });
+        });
+    }
 
-   function showPreview() {
-  
+    var dictionary = {
+        "\&": "&amp;",
+        "\<": "&lt;",
+        "\"": "&quot;",
+        "\>": "&gt;",
+        "\:\)": "<img src='../images/emotions/smile.gif'>",
+        "\;\)": "<img src='../images/emotions/wink.gif'>",
+        "\:\(": "<img src='../images/emotions/sad.gif'>",
+        "\:robot\:": "<img src='../images/emotions/robot.gif'>",
+        "\:oops\:": "<img src='../images/emotions/oops.gif'>",
+        "\:inLove\:": "<img src='../images/emotions/inLove.gif'>",
+        "\:fingerUp\:": "<img src='../images/emotions/fingerUp.gif'>",
+        "\:fingerDown\:": "<img src='../images/emotions/fingerDown.gif'>",
+        "\:angel\:": "<img src='../images/emotions/angel.gif'>",
+        "\:angry\:": "<img src='../images/emotions/angry.gif'>",
+        "\n": "<br />"
+    };
+
+    function showPreview() {
+
         preview = document.getElementById('DivPreview');
         text = "";
         if (document.all) {
@@ -148,25 +169,7 @@ function ready() {
             text = document.getElementById('MessageText').value;
         }
 
-        var dictionary = {
-            "\&": "&amp;",
-            "\<": "&lt;",
-            "\"": "&quot;",
-            "\>": "&gt;",
-            "\:\)": "<img src='../images/emotions/smile.gif'>",
-            "\;\)": "<img src='../images/emotions/wink.gif'>",
-            "\:\(": "<img src='../images/emotions/sad.gif'>",
-            "\:robot\:": "<img src='../images/emotions/robot.gif'>",
-            "\:oops\:": "<img src='../images/emotions/oops.gif'>",
-            "\:inLove\:": "<img src='../images/emotions/inLove.gif'>",
-            "\:fingerUp\:": "<img src='../images/emotions/fingerUp.gif'>",
-            "\:fingerDown\:": "<img src='../images/emotions/fingerDown.gif'>",
-            "\:angel\:": "<img src='../images/emotions/angel.gif'>",
-            "\:angry\:": "<img src='../images/emotions/angry.gif'>",
-            "\n": "<br />"
-        };
-
-        // ) and ( signs should be escaped
+        // ) and ( signs should be also escaped
         var regText = Object.keys(dictionary).join("|").replace(/\)/g,"\\)").replace(/\(/g,"\\(");
         var reg = new RegExp(regText,"gi");
         var str = text.replace(reg, function(matched){
@@ -176,5 +179,5 @@ function ready() {
         document.getElementById('DivPreview').innerHTML = "<p>" + str + "</p>";
     }
 
-</script>
+    </script>
 }
