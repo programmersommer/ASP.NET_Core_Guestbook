@@ -14,6 +14,15 @@
     {
       "library": "datatables@1.10.18",
       "destination": "wwwroot/datatables/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-validation-unobtrusive@3.2.11",
+      "destination": "wwwroot/jquery-validation-unobtrusive/"
+    },
+    {
+      "library": "jquery-validation@1.19.1",
+      "destination": "wwwroot/jquery-validation/"
     }
   ]
 }

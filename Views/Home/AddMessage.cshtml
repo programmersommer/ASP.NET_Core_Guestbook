@@ -16,7 +16,7 @@
 
 
 <div class="container">
-    <form method="post" name="message">
+    <form method="post" name="Message" id="Message">
 
         <div class="row mt-3">
             <div class="form-group col-10 col-md-5 col-xl-4 offset-1">
@@ -74,8 +74,13 @@
 
 @section Scripts {
 
+    <script src="~/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
     <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["ReCaptcha:SiteKey"]" async defer></script>
     <script nonce="TEtKSEIjJFUyeWJ0NHVieWxCWVVVT2RmYmc7d3RoaA==">
+
+    $("#Message").validate();
 
     var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -91,7 +96,7 @@
     document.addEventListener("DOMContentLoaded", ready);
 
     function ready() {
-        document.getElementById('BtnAddMessage').onclick = ValidateRecaptcha;
+        document.getElementById('BtnAddMessage').onclick = PostMessage;
         document.getElementById('MessageText').addEventListener("dragover", dragover);
         document.getElementById('MessageText').addEventListener("drop", drop);
         document.getElementById('MessageText').onchange = textchanged;
@@ -127,13 +132,15 @@
         e.dataTransfer.setData("text", e.target.dataset.value);
     }
 
-    function ValidateRecaptcha() {
+    function PostMessage() {
+        if (!$("#Message").valid()) return;
+
         grecaptcha.ready(function() {
            grecaptcha.execute('@Configuration["ReCaptcha:SiteKey"]', {action: 'homepage'}).then(function(token) {
                 xhttp.open('POST', '@Url.Action("AddMessage", "Home")', true);
                 xhttp.setRequestHeader("RequestVerificationToken",
                 document.getElementById('RequestVerificationToken').value);
-                var formData = new FormData(document.forms.message);
+                var formData = new FormData(document.forms.Message);
                 formData.append("Token", token)
                 xhttp.send(formData);
            });
